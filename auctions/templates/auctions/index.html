@@ -2,6 +2,63 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+    <a href="#" class="listings container p-2">
+    {% for listing in listings %}
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+      <div class="listing">
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 200px;">
+        <h4>{{ listing.title }}</h4>
+        <p>{{ listing.description }}</p>
+      </div>
+    {% endfor %}
+</a>
 {% endblock %}
