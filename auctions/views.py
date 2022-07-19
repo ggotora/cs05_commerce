@@ -2,7 +2,7 @@ from asyncio.constants import LOG_THRESHOLD_FOR_CONNLOST_WRITES
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 
 from .models import User, Listing, Bid
@@ -79,3 +79,17 @@ def new_listing(request):
     return render(request, "auctions/new_listing.html", {
         "form": form 
     })
+
+def listing(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    context = {
+        "listing": listing
+
+    }
+    return render(request, "auctions/listing.html", context )
+
+def add_to_watchlist(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    listing.watchlist
+
+    
