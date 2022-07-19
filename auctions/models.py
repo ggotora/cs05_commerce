@@ -1,6 +1,45 @@
+from sre_parse import CATEGORIES
+from unicodedata import category
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 class User(AbstractUser):
     pass
+
+class Listing(models.Model):
+    CATEGORIES = (
+        ("Fashion", "Fashion"),
+        ("Toys", "Toys"),
+        ("Electronics", "Electronics"),
+        ("Home", "Home"),
+    )
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    category = models.CharField(choices=CATEGORIES, max_length=30)
+    image = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
+    starting_price = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+class Bid(models.Model):
+    listing = models.ForeignKey(Listing)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    bid_by = models.ForeignKey(User)
+
+    def __str__(self):
+        return f"Bid {self.price}"
+
+class Comment(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    content = models.TextField()
+    author = models.ManyToManyField(User)
+    date = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.content 
+
+
