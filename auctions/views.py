@@ -1,10 +1,12 @@
+from asyncio.constants import LOG_THRESHOLD_FOR_CONNLOST_WRITES
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Listing, Bid
+from .forms import ListingForm
 
 
 def index(request):
@@ -63,6 +65,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def new_listing(request):
+    form = ListingForm()
     return render(request, "auctions/new_listing.html", {
         "form": form 
     })
