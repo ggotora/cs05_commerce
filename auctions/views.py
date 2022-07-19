@@ -2,7 +2,7 @@ from asyncio.constants import LOG_THRESHOLD_FOR_CONNLOST_WRITES
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import User, Listing, Bid
@@ -64,7 +64,15 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+
 def new_listing(request):
+    if request.method == "POST":
+        form = ListingForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = request.user
+            instance.save()
+            return redirect('/')
     form = ListingForm()
     return render(request, "auctions/new_listing.html", {
         "form": form 
