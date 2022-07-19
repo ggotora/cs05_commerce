@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+{% block title %}{{ listing.title }}{% endblock %}
+{% load static %}
+{% block body %}
+    <h2>{{ listing.title }}</h2>
+    <hr>
+    <div class="row">
+        <div class="col-3">
+            {% if listing.image %}
+            <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%;">
+            {% else %}
+            <img src="static 'auctions/assets/unavailable.png' " alt="{{ listing.title }}" style="width: 100%;">
+            {% endif%}
+
+        </div>
+        <div class="col-9">
+
+        </div>
+    </div>
+
+{% endblock %}
