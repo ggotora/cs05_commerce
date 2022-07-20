@@ -26,6 +26,7 @@
         </div>
         <div class="col-8">
             <div class="row">
+                {{ listing.current_price }}
                 <h4 class="mx-4 p-2">Starting Price $ {{ listing.starting_price}}</h4>
                 <form method="post" class="bg-light mr-4 p-2 border rounded">
                     {% csrf_token %}
