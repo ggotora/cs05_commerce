@@ -77,19 +77,33 @@ def new_listing(request):
             return redirect('/')
     form = ListingForm()
     return render(request, "auctions/new_listing.html", {
-        "form": form 
+        "form": form
     })
 
 def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
+    if listing.watchlist.filter(id=request.user.id).exists():
+        added = True
+    else:
+        added = False
+
     context = {
-        "listing": listing
+        "listing": listing, 
+        "added": added 
 
     }
     return render(request, "auctions/listing.html", context )
 
-def add_to_watchlist(request, listing_id):
+def add_remove_watchlist(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    listing.watchlist
-
+    added = False
+    if listing.watchlist.filter(id=request.user.id).exists():
+        listing.watchlist.remove(request.user)
+        added = False
+    else:
+        listing.watchlist.add(request.user)
+        added = True
+    return redirect('listing', listing_id)
+    
+    
     

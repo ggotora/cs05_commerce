@@ -3,8 +3,18 @@
 {% load static %}
 {% block body %}
     <h2>{{ listing.title }}</h2>
-    <hr>
+        <hr>
+    <div class="my-4">
+    {% if added %}
+    
+    <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-danger">On Your Watchlist <i class="fas fa-heart ml-4"></i></a>
+    {% else %}
+    <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-danger">Add To Watchlist<i class="fas fa-plus ml-4"></i></a> 
+
+        {% endif %}
+    </div>
     <div class="row">
+        
         <div class="col-3">
             {% if listing.image %}
             <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%;">
