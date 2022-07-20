@@ -1,12 +1,12 @@
-from asyncio.constants import LOG_THRESHOLD_FOR_CONNLOST_WRITES
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import User, Listing, Bid
-from .forms import ListingForm
+from .forms import BidForm, ListingForm
 
 
 def index(request):
@@ -81,19 +81,33 @@ def new_listing(request):
     })
 
 def listing(request, listing_id):
+    # watchlist 
     listing = get_object_or_404(Listing, pk=listing_id)
     if listing.watchlist.filter(id=request.user.id).exists():
         added = True
     else:
         added = False
-
+    
+    #bid 
+    if request.method == "POST":
+        form = BidForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.listing = listing 
+            instance.bid_by = request.user 
+            instance.save()
+            return redirect('listing', listing_id)
+    else:
+        form = BidForm()
     context = {
         "listing": listing, 
-        "added": added 
+        "added": added, 
+        "form": form 
 
     }
     return render(request, "auctions/listing.html", context )
 
+@login_required(login_url="login")
 def add_remove_watchlist(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     added = False

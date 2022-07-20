@@ -4,18 +4,19 @@
 {% block body %}
     <h2>{{ listing.title }}</h2>
         <hr>
+    <div class="container">
     <div class="my-4">
-    {% if added %}
-    
-    <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-danger">On Your Watchlist <i class="fas fa-heart ml-4"></i></a>
-    {% else %}
-    <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-danger">Add To Watchlist<i class="fas fa-plus ml-4"></i></a> 
-
-        {% endif %}
     </div>
     <div class="row">
         
-        <div class="col-3">
+        <div class="col-4">
+            {% if added %}
+    
+            <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-success">On Your Watchlist <i class="fas fa-heart ml-4"></i></a>
+            {% else %}
+            <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-danger">Add To Watchlist<i class="fas fa-plus ml-4"></i></a> 
+        
+                {% endif %}
             {% if listing.image %}
             <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%;">
             {% else %}
@@ -23,9 +24,22 @@
             {% endif%}
 
         </div>
-        <div class="col-9">
+        <div class="col-8">
+            <div class="row">
+                <h4 class="mx-4 p-2">Starting Price $ {{ listing.starting_price}}</h4>
+                <form method="post" class="bg-light mr-4 p-2 border rounded">
+                    {% csrf_token %}
+                    {{ form }}
+                    <button type="submit">Bid</button>
+                </form>
+            </div>
+            <p>{{ listing.bid_set.all }}</p>
+            
+            <p>{{ listing.description }}</p>
+            <p><small class="text-muted">Posted by {{ listing.owner }} {{ listing.date }}</small></p>
 
         </div>
     </div>
+</div>
 
 {% endblock %}

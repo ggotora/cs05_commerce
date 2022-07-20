@@ -19,11 +19,12 @@ class Listing(models.Model):
     starting_price = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
     watchlist = models.ManyToManyField(User, blank=True, default=None, related_name='watchlist')
-
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+    def current_price(self):
+        return self.bid_set.all().aggregate(Max('price'))['price__max']
 
 class Bid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
