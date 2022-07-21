@@ -2,30 +2,37 @@
 {% block title %}Active Listings{% endblock %}
 {% load static %}
 {% block body %}
-    <h2>Active Listings</h2>
-    <div class="listings container p-2">
-    {% for listing in listings %}
-      <a href="{% url 'listing' listing.id %}" class="listing px-3">
-        
-        <div style="height: 9rem">
-          {% if listing.image %}
+<h2>Active Listings</h2>
+<div class="listings container p-2">
+  {% for listing in listings %}
+  {% if listing.active %}
+    <a href="{% url 'listing' listing.id %}" class="listing px-3">
+
+      <div style="height: 9rem">
+        {% if listing.image %}
         <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%; height:100%">
         {% else %}
-        <img src="{% static 'auctions/images/unavailable.png' %}" alt="{{ listing.title }}" style="width: 100%; height:100%">
+        <img src="{% static 'auctions/images/unavailable.png' %}" alt="{{ listing.title }}"
+          style="width: 100%; height:100%">
         {% endif%}
       </div>
-      
-        {% if listing.current_price is None %}
-        <p class="text-danger m-0">No Bids on listing </p>
-        <h5 class="text-truncate">Starting Price $ {{ listing.starting_price }}</h5>
-        {% else %}
-        <p class="text-danger m-0">Listing is now bidding </p>
-        <h5 class="text-truncate">Price $ {{ listing.current_price }}</h5>
-        {% endif %}
-        <h5 class="text-truncate">{{ listing.title }}</h5>
-        <hr class="m-0 p-0" style="width:30%;">
-        <p><small>{{ listing.description|truncatechars:109 }}</small></p>
-      </a>
-    {% endfor %}
+
+      {% if listing.current_price is None %}
+      <p class="text-danger m-0">No Bids on listing </p>
+      <h5 class="text-truncate">Starting Price $ {{ listing.starting_price }}</h5>
+      {% else %}
+      <p class="text-danger m-0">Listing is now bidding </p>
+      <h5 class="text-truncate">Price $ {{ listing.current_price }}</h5>
+      {% endif %}
+      <h5 class="text-truncate">{{ listing.title }}</h5>
+      <hr class="m-0 p-0" style="width:30%;">
+      <p><small>{{ listing.description|truncatechars:109 }}</small></p>
+    </a>
+  {% else %}
+  <h1>No active listings</h1>
+  {% endif %}
+  {% empty %}
+  <h1>No active listings</h1>
+  {% endfor %}
 </div>
 {% endblock %}
