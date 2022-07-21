@@ -1,3 +1,4 @@
+from xml.etree.ElementTree import Comment
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -8,8 +9,8 @@ from django.contrib import messages
 from django.db.models import Max
 
 
-from .models import User, Listing, Bid
-from .forms import BidForm, ListingForm
+from .models import User, Listing, Bid, Comment
+from .forms import BidForm, CommentForm, ListingForm
 
 
 def index(request):
@@ -90,10 +91,18 @@ def listing(request, listing_id):
         added = True
     else:
         added = False
-    
     #bid
     if request.method == "POST":
         form = BidForm(request.POST)
+        form2 = CommentForm(request.POST)
+        # comment 
+        if form2.is_valid():
+            instance2 = form2.save(commit=False)
+            instance2.listing = listing
+            instance2.author = request.user
+            instance2.save()
+            return redirect('listing', listing_id )
+        
         if form.is_valid():
             instance = form.save(commit=False)
             instance.listing = listing 
@@ -116,10 +125,15 @@ def listing(request, listing_id):
             
     else:
         form = BidForm()
+        form2 = CommentForm()
+    
     context = {
         "listing": listing, 
         "added": added, 
         "form": form, 
+        "form2": form2, 
+        "comments": listing.comment_set.all()
+
 
 
 
@@ -138,25 +152,28 @@ def add_remove_watchlist(request, listing_id):
         added = True
     return redirect('listing', listing_id)
 
-@login_required(login_url="login")
+    
 def close_listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    highest = listing.bid_set.aggregate(highest=Max('price'))['highest']
-    highest_price_bid = listing.bid_set.get(price=highest)
-    print(highest_price_bid.bid_by, highest_price_bid.price)
-    # for category in Listing.CATEGORIES:
-    #     print(">>>>", category[0])
-    # print("Highest B", bid.bid_by)
-
-    # print(highest)
-    # print([lis['category'] for lis in Listing.objects.values('category')])
-    # for bid in listing.bid_set.all():
-    #     if highest == bid.price:
-    #         print(bid.price, bid.bid_by)
-    #         print("here")
-        # print(bid.price, bid.bid_by)
-        # print(bid.bid_by)
+    # Listing.objects.filter(id = listing_id).update(active = False).save()
+    if listing.active:
+        listing.active = False
+        listing.save()
     return redirect('listing', listing_id)
-    
-    
+
+@login_required(login_url='login')
+def closed_listing(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if listing.bid_set.all():
+        closed_bid = listing.bid_set.filter(price=listing.current_price()).get()
+        return render(request, 'auctions/closed.html', {
+        "closed_bid":closed_bid, 
+        'listing': listing})
+    return render(request, 'auctions/closed.html', {
+        'listing': listing})
+ 
+ 
+
+
+
     

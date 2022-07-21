@@ -1,17 +1,16 @@
 {% extends "auctions/layout.html" %}
 {% block title %}{{ listing.title }}{% endblock %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block body %}
 <h1>{{ bid }}</h1>
 <h2>{{ listing.title }}</h2>
 <hr>
 <div class="container">
-
-
     <div class="row">
-
         <div class="col-4">
             <div class="mb-2">
+                {% if listing.active%}
                 <div class="row">
                     <div class="mr-3">
                         {% if added %}
@@ -23,38 +22,52 @@
                         {% endif %}
                     </div>
                     <div>
-                       
+                        {% if listing.active and listing.owner == request.user %}
+                
                         <a href="{% url 'close_listing' listing.id %}" class="btn btn-danger">Close Listing
                             <i class="fas fa-window-close ml-2"></i></a>
-                    
+                        {% endif %}
                     </div>
                 </div>
+                {% else%}
+                <h4 class="card bg-grey text-center text-danger">
+                    Bidding now closed on listing!!! 
+                </h4>
+                {% endif %}
             </div>
             {% if listing.image %}
             <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%;">
             {% else %}
-            <img src="static 'auctions/assets/unavailable.png' " alt="{{ listing.title }}" style="width: 100%;">
+            <img src="{% static 'auctions/images/unavailable.png' %}" alt="{{ listing.title }}" style="width: 100%;">
             {% endif%}
-
         </div>
         <div class="col-8">
+            {% if listing.active %}
             <div class="row">
                 <div>
                     {% if listing.current_price %}
                     <h4 class="mx-4 p-2">Current Price $ {{ listing.current_price |floatformat:2}}</h4>
                     {%else %}
                     <h4 class="mx-4 p-2">Starting Price $ {{ listing.starting_price}}</h4>
-
                     {%endif%}
-
                 </div>
                 <!-- big form  -->
-                <form method="post" class="bg-light mr-4 p-2 border rounded">
-                    {% csrf_token %}
-                    {{ form }}
-                    <button type="submit">Bid</button>
-                </form>
+                <div>
+                    <form method="post" class="bg-light mr-4 p-2 border rounded">
+                        {% csrf_token %}
+                        {{ form }}
+                        <button type="submit">Bid</button>
+                    </form>
+                </div>
             </div>
+            {% else %}
+            <div class="mb-2">
+                
+                <a href="{% url 'closed_listing' listing.id %}" class="btn btn-primary mx-4">
+                    View closed listings
+                </a>
+            </div>
+            {% endif %}
             <!-- messages -->
             {% if messages %}
             <ul class="messages">
@@ -63,11 +76,30 @@
                 {% endfor %}
             </ul>
             {% endif %}
-
-
             <p>{{ listing.description }}</p>
             <p><small class="text-muted">Posted by {{ listing.owner }} {{ listing.date }}</small></p>
 
+        </div>
+    </div>
+    <hr>
+    
+    <div class="row">
+        <div class="col-7 mx-2">
+            <h4> Comments</h4>
+            {% for comment in comments %}
+            <div class="card bg-light my-3 px-3 pt-2">
+                <p class="m-0">{{ comment.content }}</p>
+                <p><small>{{ comment.author }} {{ comment.date }}</small></p>
+            </div>
+            {% endfor %}
+        </div>
+        <div>
+            <h4>Add Comment...</h4>
+            <form method="post">
+                {% csrf_token %}
+                {{ form2 |crispy }}
+                <button class="btn btn-secondary" type="submit">Add Comment</button>
+            </form>
         </div>
     </div>
 </div>

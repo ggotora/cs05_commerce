@@ -10,3 +10,12 @@ body {
 .listing {
     justify-content:space-evenly;
 }
+
+.closed {
+    /* width: 400px;
+    position: absolute;
+    left: 395px;
+    background-color: grey; */
+    /* z-index: 1; */
+
+}

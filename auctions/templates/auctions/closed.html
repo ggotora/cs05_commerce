@@ -1,0 +1,67 @@
+{% extends "auctions/layout.html" %}
+{% block title %}Active Listings{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+    {% if not listing.active %}
+    <h2>Closed Listing</h2>
+<div class="container">
+        {% if closed_bid %}
+            {% if closed_bid.bid_by == request.user %}
+            <h3>Conragulations!! You have won this bid at $ {{ closed_bid.price }}</h3>
+            {% else %}
+            <h3>Bid won by {{ closed_bid.bid_by }}</h3>
+            {% endif %}
+        {% else %}
+            <h3 class="text-center text-danger">This listing was closed by {{ listing.owner}} without any bids </h3>
+        {% endif%}
+    <div class="row border">
+        <div class="col-4">
+            {% if listing.image %}
+            <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%;">
+            {% else %}
+            <img src="{% static 'auctions/images/unavailable.png' %}" alt="{{ listing.title }}" style="width: 100%;">
+            {% endif%}
+
+        </div>
+        <div class="col-8">
+            <h5>{{ listing.title }}</h5>
+            <p>{{ listing.description }}</p>
+            <p class="text-danger"><small>Closed by {{ listing.owner }}</small></p>
+
+        </div>
+    </div>
+</div>
+
+    {% endif %}
+{% endblock %}
+<!-- {{ closed_bid }}
+{% if closed_bid %}
+    <h1>{{ closed_bid.listing.title }}</h1>
+    {% if closed_bid.bid_by == request.user %}
+    <h3>Conragulations!! You have won this bid at $ {{ closed_bid.price }}</h3>
+    {% else %}
+    <h3>Bid won by {{ closed_bid.bid_by }}</h3>
+    {% endif %}
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                {% if listing.image %}
+                <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%;">
+                {% else %}
+                <img src="{% static 'auctions/images/unavailable.png' %}" alt="{{ listing.title }}" style="width: 100%;">
+                {% endif%}
+
+            </div>
+            <div class="col-8">
+                <p>{{ closed_bid.listing.description }}</p>
+                <p><small class="text-muted">Posted by {{ closed_bid.listing.owner }} {{ closed_bid.listing.date }}</small></p>
+
+            </div>
+        </div>
+    </div>
+{% else %}
+<h1>Closed without bids </h1>
+{% endif %} -->

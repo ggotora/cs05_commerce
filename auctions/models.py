@@ -40,7 +40,7 @@ class Bid(models.Model):
 class Comment(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     content = models.TextField()
-    author = models.ManyToManyField(User)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     date = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
