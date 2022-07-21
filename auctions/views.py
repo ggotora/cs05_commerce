@@ -138,8 +138,25 @@ def add_remove_watchlist(request, listing_id):
         added = True
     return redirect('listing', listing_id)
 
+@login_required(login_url="login")
+def close_listing(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    highest = listing.bid_set.aggregate(highest=Max('price'))['highest']
+    highest_price_bid = listing.bid_set.get(price=highest)
+    print(highest_price_bid.bid_by, highest_price_bid.price)
+    # for category in Listing.CATEGORIES:
+    #     print(">>>>", category[0])
+    # print("Highest B", bid.bid_by)
 
-
+    # print(highest)
+    # print([lis['category'] for lis in Listing.objects.values('category')])
+    # for bid in listing.bid_set.all():
+    #     if highest == bid.price:
+    #         print(bid.price, bid.bid_by)
+    #         print("here")
+        # print(bid.price, bid.bid_by)
+        # print(bid.bid_by)
+    return redirect('listing', listing_id)
     
     
     

@@ -21,6 +21,7 @@ class Listing(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     watchlist = models.ManyToManyField(User, blank=True, default=None, related_name='watchlist')
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
