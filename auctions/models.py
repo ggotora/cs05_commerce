@@ -4,7 +4,8 @@ from django.db.models import Max
 
 
 class User(AbstractUser):
-    pass
+    def watchlist_count(self):
+        return self.watchlist.count()
 
 class Listing(models.Model):
     CATEGORIES = (

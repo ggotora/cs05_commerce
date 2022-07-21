@@ -1,0 +1,18 @@
+{% extends "auctions/layout.html" %}
+{% block title %}Active Listings{% endblock %}
+{% load static %}
+{% block body %}
+    <h2>Watchlist</h2>
+    <div class="row">
+        {% for listing in watchlist%}
+        <div>
+            {{ listing.title }}
+        </div>
+        {% endfor %}
+
+
+    </div>
+   
+
+ 
+{% endblock %}
