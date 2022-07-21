@@ -152,6 +152,11 @@ def add_remove_watchlist(request, listing_id):
         added = True
     return redirect('listing', listing_id)
 
+def watchlist(request):
+    watchlist = Listing.objects.filter(watchlist=request.user.id)
+    return render(request, "auctions/watchlist.html", {
+        'watchlist': watchlist
+    })
     
 def close_listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
