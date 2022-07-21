@@ -2,21 +2,34 @@
 {% block title %}{{ listing.title }}{% endblock %}
 {% load static %}
 {% block body %}
-    <h2>{{ listing.title }}</h2>
-        <hr>
-    <div class="container">
-    <div class="my-4">
-    </div>
+<h1>{{ bid }}</h1>
+<h2>{{ listing.title }}</h2>
+<hr>
+<div class="container">
+
+
     <div class="row">
-        
+
         <div class="col-4">
-            {% if added %}
-    
-            <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-success">On Your Watchlist <i class="fas fa-heart ml-4"></i></a>
-            {% else %}
-            <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-danger">Add To Watchlist<i class="fas fa-plus ml-4"></i></a> 
-        
-                {% endif %}
+            <div class="mb-2">
+                <div class="row">
+                    <div class="mr-3">
+                        {% if added %}
+                        <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-success">On Your Watchlist
+                            <i class="fas fa-heart ml-2"></i></a>
+                        {% else %}
+                        <a href="{% url 'add_remove_watchlist' listing.id %}" class="btn btn-outline-secondary">Add To
+                            Watchlist<i class="fas fa-plus ml-2"></i></a>
+                        {% endif %}
+                    </div>
+                    <div>
+                       
+                        <a href="{% url 'close_listing' listing.id %}" class="btn btn-danger">Close Listing
+                            <i class="fas fa-window-close ml-2"></i></a>
+                    
+                    </div>
+                </div>
+            </div>
             {% if listing.image %}
             <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%;">
             {% else %}
@@ -26,16 +39,32 @@
         </div>
         <div class="col-8">
             <div class="row">
-                {{ listing.current_price }}
-                <h4 class="mx-4 p-2">Starting Price $ {{ listing.starting_price}}</h4>
+                <div>
+                    {% if listing.current_price %}
+                    <h4 class="mx-4 p-2">Current Price $ {{ listing.current_price |floatformat:2}}</h4>
+                    {%else %}
+                    <h4 class="mx-4 p-2">Starting Price $ {{ listing.starting_price}}</h4>
+
+                    {%endif%}
+
+                </div>
+                <!-- big form  -->
                 <form method="post" class="bg-light mr-4 p-2 border rounded">
                     {% csrf_token %}
                     {{ form }}
                     <button type="submit">Bid</button>
                 </form>
             </div>
-            <p>{{ listing.bid_set.all }}</p>
-            
+            <!-- messages -->
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="text-bold text-danger" {% endif %}>{{ message }}</div>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+
             <p>{{ listing.description }}</p>
             <p><small class="text-muted">Posted by {{ listing.owner }} {{ listing.date }}</small></p>
 

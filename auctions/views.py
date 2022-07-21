@@ -4,6 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Max
+
 
 from .models import User, Listing, Bid
 from .forms import BidForm, ListingForm
@@ -88,21 +91,37 @@ def listing(request, listing_id):
     else:
         added = False
     
-    #bid 
+    #bid
     if request.method == "POST":
         form = BidForm(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.listing = listing 
             instance.bid_by = request.user 
-            instance.save()
-            return redirect('listing', listing_id)
+            if listing.current_price():
+                if listing.current_price() >= instance.price:
+                    messages.error(request, f"You only bid $ {instance.price}. Your bid must be greater the current price of ${listing.current_price():.2f}")
+                    return redirect('listing', listing_id)
+                else:
+                    instance.save()
+                    messages.info(request, f"Congradulations!! You have the highest current bid ${listing.current_price():.2f}")
+                    return redirect('listing', listing_id)
+            elif instance.price <= listing.starting_price:
+                messages.error(request, f"You only bid ${instance.price}. Your starting bid must be greater than ${listing.starting_price:.2f}")
+                return redirect('listing', listing_id)
+
+            else:
+                instance.save()
+                return redirect('listing', listing_id)
+            
     else:
         form = BidForm()
     context = {
         "listing": listing, 
         "added": added, 
-        "form": form 
+        "form": form, 
+
+
 
     }
     return render(request, "auctions/listing.html", context )
@@ -118,6 +137,9 @@ def add_remove_watchlist(request, listing_id):
         listing.watchlist.add(request.user)
         added = True
     return redirect('listing', listing_id)
+
+
+
     
     
     

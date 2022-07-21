@@ -24,6 +24,7 @@ class Listing(models.Model):
 
     def __str__(self):
         return self.title
+        
     def current_price(self):
         return self.bid_set.all().aggregate(Max('price'))['price__max']
 
