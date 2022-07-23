@@ -1,7 +1,7 @@
 from xml.etree.ElementTree import Comment
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -176,7 +176,23 @@ def closed_listing(request, listing_id):
         'listing': listing})
     return render(request, 'auctions/closed.html', {
         'listing': listing})
- 
+
+def categories(request):
+    categories = [ categories[0] for categories in Listing.CATEGORIES]
+    return render(request, "auctions/categories.html",  {
+        'categories': categories
+    })
+
+def category_list(request, category):
+    try:
+        listings = Listing.objects.filter(category=category)
+    except Listing.DoesNotExist:
+        raise Http404("Listings does not exist")
+    return render(request, 'auctions/category.html', {
+        "listings": listings, 
+        'category': category 
+    })
+
  
 
 

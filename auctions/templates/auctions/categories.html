@@ -1,0 +1,18 @@
+{% extends "auctions/layout.html" %}
+{% block title %}Active Listings{% endblock %}
+{% load static %}
+{% block body %}
+<h2>Categories</h2>
+<div class="container mt-5">
+  {% for category in categories %}
+    <div class="card">
+      <a href="{% url 'category_list' category%}" class="card-body text-center h4 anchor2">{{ category }}</a>
+    </div>
+  {% endfor %}
+  </div>
+{% endblock %}
+<div class="card text-white bg-dark">
+  <div class="card-body text-center">
+    <a href="{% url 'category_list' category%}" class="card-text h4">{{ category }}</a>
+  </div>
+</div>

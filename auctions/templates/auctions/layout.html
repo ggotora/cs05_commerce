@@ -23,10 +23,14 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'new_listing' %}">Add New Listing</a>
+                    <a class="nav-link" href="{% url 'categories' %}">Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist <small class="bg-dark font-weight-bold p-1 rounded-circle text-white">{{ user.watchlist_count }}</small>  </a>
+                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist <span class="badge badge-primary badge-pill">{{ user.watchlist_count }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'new_listing' %}">Add New Listing</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>

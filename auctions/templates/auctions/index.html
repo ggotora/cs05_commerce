@@ -3,30 +3,32 @@
 {% load static %}
 {% block body %}
 <h2>Active Listings</h2>
-<div class="listings container p-2">
+<div class="listings p-2">
   {% for listing in listings %}
   {% if listing.active %}
-    <a href="{% url 'listing' listing.id %}" class="listing px-3">
-
-      <div style="height: 9rem">
+    <a href="{% url 'listing' listing.id %}" class="anchor listing px-3 mt-3 text-secondary mx-2">
+      <div style="height: 12rem">
         {% if listing.image %}
-        <img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%; height:100%">
+        <img class="img" src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: 100%; height:100%">
         {% else %}
-        <img src="{% static 'auctions/images/unavailable.png' %}" alt="{{ listing.title }}"
+        <img class="img" src="{% static 'auctions/images/unavailable.png' %}" alt="{{ listing.title }}"
           style="width: 100%; height:100%">
         {% endif%}
       </div>
 
       {% if listing.current_price is None %}
       <p class="text-danger m-0">No Bids on listing </p>
-      <h5 class="text-truncate">Starting Price $ {{ listing.starting_price }}</h5>
+      <p class="text-truncate m-0 font-weight-bond">Starting Price $ {{ listing.starting_price }}</p>
       {% else %}
       <p class="text-danger m-0">Listing is now bidding </p>
       <h5 class="text-truncate">Price $ {{ listing.current_price }}</h5>
       {% endif %}
-      <h5 class="text-truncate">{{ listing.title }}</h5>
+      <h5 class="text-truncate text-dark">{{ listing.title }}</h5>
       <hr class="m-0 p-0" style="width:30%;">
-      <p><small>{{ listing.description|truncatechars:109 }}</small></p>
+      <p class="m-0"><small>{{ listing.description|truncatechars:109 }}</small></p>
+      <hr class="m-0">
+      <p class="m-0"><small class="text-muted">{{ listing.owner }}</small></p>
+      <p class="m-0"><small class="text-muted">{{ listing.date }}</small></p>
     </a>
   {% else %}
   <h1>No active listings</h1>

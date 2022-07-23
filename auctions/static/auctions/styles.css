@@ -4,18 +4,24 @@ body {
 
 .listings {
     display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: .4rem;
 }
 .listing {
     justify-content:space-evenly;
 }
 
-.closed {
-    /* width: 400px;
-    position: absolute;
-    left: 395px;
-    background-color: grey; */
-    /* z-index: 1; */
+.anchor:hover {
+    color:rgb(100, 95, 95);
+    text-decoration: none;
+    padding: .02px;
+}
+.anchor2:hover {
+    color:rgb(100, 95, 95);
+    text-decoration: none;
+}
 
+.img:hover {
+    padding:1px;
+    background-color: grey;
 }
