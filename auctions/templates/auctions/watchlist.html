@@ -1,18 +1,38 @@
 {% extends "auctions/layout.html" %}
-{% block title %}Active Listings{% endblock %}
+{% block title %}{{ category }} Listings{% endblock %}
 {% load static %}
 {% block body %}
-    <h2>Watchlist</h2>
-    <div class="row">
-        {% for listing in watchlist%}
-        <div>
-            {{ listing.title }}
+<h2>{{ category }} My Watchlist</h2>
+<hr>
+<div class="container">
+    {% for listing in watchlist %}
+        {% if listing.active %}
+        <div class="card mb-3">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    {% if listing.image %}
+                    <img class="p-4" src="{{ listing.image.url }}" alt="{{ listing.title }}" style="width: auto; height:12rem;">
+                    {% else %}
+                    <img class="img" src="{% static 'auctions/images/unavailable.png' %}" alt="{{ listing.title }}"
+                    style="width: 100%; height:100%">
+                    {% endif%}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <p class="card-text m-1">{{ listing.title|truncatechars:80  }}</p>
+
+                        {% if listing.current_price %}
+                        <h5 class="card-title m-1">Current Price ${{ listing.current_price |floatformat:2 }}</h5>
+                        {% else %}
+                        <h5 class="card-title m-1">Starting Price ${{ listing.starting_price |floatformat:2 }}</h5>
+                        {% endif %}
+                        <p class="card-text m-0">{{ listing.description |truncatechars:180}}</p>
+                        <p class="card-text"><small class="text-muted">{{ listing.owner }}{{ listing.date }}</small></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endfor %}
-
-
-    </div>
-   
-
- 
-{% endblock %}
+        {%endif %}
+    {% endfor%}
+</div>
+    {% endblock %}

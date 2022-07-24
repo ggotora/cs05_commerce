@@ -18,15 +18,20 @@
               </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    <p class="card-text my-1 font-weight-bold">{{ listing.title|truncatechars:80  }}</p>
+                    {% if listing.current_price %}
+                    <h5 class="card-title my-2">Current Price ${{ listing.current_price |floatformat:2 }}</h5>
+                    {% else %}
+                    <h5 class="card-title my-2">Starting Price ${{ listing.starting_price |floatformat:2 }}</h5>
+                    {% endif %}
+                    <p class="card-text m-0 text-primary">{{ listing.description |truncatechars:180}}</p>
+                    <p class="card-text mt-1 mb-0"><small class="text-muted">{{ listing.owner }}{{ listing.date }}</small></p>
                 </div>
             </div>
         </div>
     </div>
     {%endif %}
+    
     {% endfor%}
 </div>
     {% endblock %}
