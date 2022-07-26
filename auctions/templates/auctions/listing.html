@@ -58,14 +58,15 @@
                 <!-- big form  -->
                 <div>
                     {% if user.is_authenticated %}
-                    {% if listing.owner %}
-                      
-                    {% else%}
+                    {% if request.user != listing.owner %}
                     <form method="post" class="bg-light mr-4 p-2 border rounded">
                         {% csrf_token %}
                         {{ form }}
                         <button type="submit">Bid</button>
                     </form>
+                      
+                    {% else%}
+                   
                     {% endif %}
                     {% else %}
                     <a class="btn btn-success" href="{% url 'login' %}">Login to bid </a>
