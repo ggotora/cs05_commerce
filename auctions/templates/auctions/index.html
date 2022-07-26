@@ -17,10 +17,10 @@
       </div>
 
       {% if listing.current_price is None %}
-      <p class="text-danger m-0">No Bids on listing </p>
+      <p class="text-warning m-0">No Bids on listing </p>
       <p class="text-truncate m-0 font-weight-bond">Starting Price $ {{ listing.starting_price |floatformat:2 }}</p>
       {% else %}
-      <p class="text-danger m-0">Listing is now bidding </p>
+      <p class="text-success m-0">Listing is now bidding </p>
       <h5 class="text-truncate m-0">Price $ {{ listing.current_price |floatformat:2 }}</h5>
       {% endif %}
       <h5 class="text-truncate text-dark">{{ listing.title }}</h5>
