@@ -160,9 +160,11 @@ def watchlist(request):
     
 def close_listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    # Listing.objects.filter(id = listing_id).update(active = False).save()
     if listing.active:
         listing.active = False
+        users = User.objects.filter(watchlist=listing.id)
+        for user in users:
+            listing.watchlist.remove(user.id)
         listing.save()
     return redirect('listing', listing_id)
 
